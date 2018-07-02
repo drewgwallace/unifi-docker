@@ -53,8 +53,10 @@ MONGOLOCK="${DATADIR}/db/mongod.lock"
 
 UNIFI_UID=$(id -u "${UNIFI_USER}")
 DATADIR_UID=$(stat "${DATADIR}" -Lc %u)
-if [ ${UNIFI_UID} -ne ${DATADIR_UID} ]; then
-  msg="${NAME} cannot start. Please create ${UNIFI_USER} user, and chown -R ${UNIFI_USER} ${DATADIR} ${LOGDIR} ${RUNDIR}"
+UNIFI_GID=$(id -g "${UNIFI_USER}")
+DATADIR_GID=$(stat "${DATADIR}" -Lc %g)
+if [ ${UNIFI_UID} -ne ${DATADIR_UID} ] || [ ${UNIFI_GID} -ne ${DATADIR_GID} ] ; then
+  msg="${NAME} cannot start. Please create ${UNIFI_USER} user, and chown -R ${UNIFI_USER}: ${DATADIR} ${LOGDIR} ${RUNDIR}"
   echo "$msg" >&2
   exit 1
 fi
