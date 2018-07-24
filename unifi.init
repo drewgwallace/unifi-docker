@@ -27,6 +27,7 @@ DATADIR=${UNIFI_DATA_DIR:-/var/lib/${NAME}}
 LOGDIR=${UNIFI_LOG_DIR:-/var/log/${NAME}}
 RUNDIR=${UNIFI_RUN_DIR:-/var/run/${NAME}}
 
+
 JVM_EXTRA_OPTS="${JVM_EXTRA_OPTS} -Dunifi.datadir=${DATADIR} -Dunifi.logdir=${LOGDIR} -Dunifi.rundir=${RUNDIR}"
 
 if [ ! -z "${JAVA_ENTROPY_GATHER_DEVICE}" ]; then
