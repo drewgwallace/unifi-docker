@@ -51,7 +51,7 @@ UNIFI_USER=${UNIFI_USER:-unifi}
 
 MONGOLOCK="${DATADIR}/db/mongod.lock"
 
- UNIFI_UID=$(id -u "${UNIFI_USER}")
+UNIFI_UID=$(id -u "${UNIFI_USER}")
 msg="$UNIFI_UID"
 # DATADIR_UID=$(stat "${DATADIR}" -Lc %u)
 # if [ ${UNIFI_UID} -ne ${DATADIR_UID} ]; then
