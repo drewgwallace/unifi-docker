@@ -46,7 +46,7 @@ RUN groupadd -g 750 -o unifi \
 EXPOSE 6789/tcp 8080/tcp 8443/tcp 8880/tcp 8843/tcp 3478/udp 10001/udp
 
 COPY unifi.default /etc/default/unifi
-COPY unifi.init /usr/lib/unifi/bin/unifi.init
+COPY unifi.init /unifi.init
 
 # Enable running Unifi Controller as a standard user
 # It requires that we create certain folders and links first
@@ -56,7 +56,7 @@ RUN mkdir -p -m 755 /var/lib/unifi /var/log/unifi /var/run/unifi /usr/lib/unifi/
     && ln -sf /var/log/unifi /usr/lib/unifi/logs \
     && ln -sf /var/run/unifi /usr/lib/unifi/run \
     && chown unifi:unifi /var/lib/unifi /var/log/unifi /var/run/unifi /usr/lib/unifi/work \
-    && chmod 755 /usr/lib/unifi/bin/unifi.init
+    && chmod 755 /unifi.init
 USER unifi
 
 # Add healthcheck (requires Docker 1.12)
@@ -71,4 +71,4 @@ VOLUME ["/var/lib/unifi", "/var/log/unifi"]
 # cleanly.
 # ENTRYPOINT ["/sbin/tini", "-g", "--", "/usr/lib/unifi/bin/unifi.init"]
 ENTRYPOINT ["/tini", "--"]
-CMD /usr/lib/unifi/bin/unifi.init
+CMD /unifi.init
