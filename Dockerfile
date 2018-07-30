@@ -4,7 +4,10 @@ FROM ${BASEIMG}:${BASEVERS}
 
 ARG ARCH=amd64
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TINI_VERSION=v0.16.1
+ARG TINI_VERSION=v0.18.0
+
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini.asc /tini.asc
 
 # Install Ubiquiti UniFi Controller dependencies
 RUN apt-get update \
@@ -19,12 +22,12 @@ RUN apt-get update \
         procps \
     && apt-get clean -qy \
     && rm -rf /var/lib/apt/lists/* \
-    && curl -L https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-${ARCH} -o /sbin/tini \
-    && curl -L https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-${ARCH}.asc -o /sbin/tini.asc \
+                                                                                                             
+                                                                                                                     
     && gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
-    && gpg --batch --verify /sbin/tini.asc /sbin/tini \
-    && rm -f /sbin/tini.asc \
-    && chmod 0755 /sbin/tini \
+    && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
+    && gpg --verify /tini.asc \
+    && chmod 0755 /tini \
     && apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv 4A228B2D358A5094178285BE06E85760C0A52C50
 
 
@@ -66,4 +69,6 @@ VOLUME ["/var/lib/unifi", "/var/log/unifi"]
 # Requires to send the TERM signal to all process as JSVC does not know mongod
 # was launched by the Unifi application. Therefore mongod was not shutdown
 # cleanly.
-ENTRYPOINT ["/sbin/tini", "-g", "--", "/usr/lib/unifi/bin/unifi.init"]
+# ENTRYPOINT ["/sbin/tini", "-g", "--", "/usr/lib/unifi/bin/unifi.init"]
+ENTRYPOINT ["/tini", "--"]
+CMD /usr/lib/unifi/bin/unifi.init

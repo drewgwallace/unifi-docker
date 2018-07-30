@@ -27,7 +27,6 @@ DATADIR=${UNIFI_DATA_DIR:-/var/lib/${NAME}}
 LOGDIR=${UNIFI_LOG_DIR:-/var/log/${NAME}}
 RUNDIR=${UNIFI_RUN_DIR:-/var/run/${NAME}}
 
-
 JVM_EXTRA_OPTS="${JVM_EXTRA_OPTS} -Dunifi.datadir=${DATADIR} -Dunifi.logdir=${LOGDIR} -Dunifi.rundir=${RUNDIR}"
 
 if [ ! -z "${JAVA_ENTROPY_GATHER_DEVICE}" ]; then
@@ -52,14 +51,13 @@ UNIFI_USER=${UNIFI_USER:-unifi}
 
 MONGOLOCK="${DATADIR}/db/mongod.lock"
 
-# UNIFI_UID=$(id -u "${UNIFI_USER}")
+ UNIFI_UID=$(id -u "${UNIFI_USER}")
+msg="$UNIFI_UID"
 # DATADIR_UID=$(stat "${DATADIR}" -Lc %u)
-# UNIFI_GID=$(id -g "${UNIFI_USER}")
-# DATADIR_GID=$(stat "${DATADIR}" -Lc %g)
-# if [ ${UNIFI_UID} -ne ${DATADIR_UID} ] || [ ${UNIFI_GID} -ne ${DATADIR_GID} ] ; then
-  # msg="${NAME} cannot start. Please create ${UNIFI_USER} user, and chown -R ${UNIFI_USER}: ${DATADIR} ${LOGDIR} ${RUNDIR}"
-  # echo "$msg" >&2
-  # exit 1
+# if [ ${UNIFI_UID} -ne ${DATADIR_UID} ]; then
+#   msg="${NAME} cannot start. Please create ${UNIFI_USER} user, and chown -R ${UNIFI_USER} ${DATADIR} ${LOGDIR} ${RUNDIR}"
+#   echo "$msg" >&2
+#   exit 1
 # fi
 
 cd ${BASEDIR}
